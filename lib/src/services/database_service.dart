@@ -22,14 +22,14 @@ class DatabaseService {
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE projects(
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             path TEXT
           )
         ''');
         await db.execute('''
           CREATE TABLE media_files(
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             size INTEGER,
             type TEXT,
@@ -40,7 +40,7 @@ class DatabaseService {
         ''');
         await db.execute('''
           CREATE TABLE exceptions(
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             path TEXT
           )
         ''');
@@ -55,7 +55,10 @@ class DatabaseService {
   }
 
   Future<void> addProject(Project project) async {
-    await _database.insert('projects', project.toMap());
+    await _database.insert('projects', {
+      'name': project.name,
+      'path': project.path,
+    });
   }
 
   Future<List<MediaFile>> loadFilesFromProject(int projectId) async {

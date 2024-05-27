@@ -43,7 +43,6 @@ class MainView extends StatelessWidget {
             flex: 1,
             child: Column(
               children: [
-                // 确保只有一个“添加项目”按钮
                 ElevatedButton(
                   onPressed: () async {
                     final directoryPath = await FilePicker.platform.getDirectoryPath();
