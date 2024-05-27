@@ -4,7 +4,14 @@ import '../models/project.dart';
 import '../models/media_file.dart';
 
 class DatabaseService {
+  static final DatabaseService _instance = DatabaseService._internal();
   late Database _database;
+
+  factory DatabaseService() {
+    return _instance;
+  }
+
+  DatabaseService._internal();
 
   Future<void> initialize() async {
     final dbPath = await getDatabasesPath();
