@@ -5,7 +5,7 @@ import 'src/services/database_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final databaseService = DatabaseService();
-  await databaseService.initialize();
+  await databaseService.initialize(); // 确保在使用前调用 initialize 方法
   runApp(MyApp(databaseService: databaseService));
 }
 
