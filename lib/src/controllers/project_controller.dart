@@ -1,3 +1,4 @@
+import 'dart:io'; // 添加这个导入
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import '../models/project.dart';
@@ -40,6 +41,6 @@ class ProjectController with ChangeNotifier {
 
   Future<void> showInFinder(String path) async {
     _logger.i('Opening Finder for $path');
-    await Process.run('open', ['-R', path]);
+    await Process.run('open', ['-R', path]); // 这里使用了 Process
   }
 }
