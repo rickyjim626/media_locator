@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';  // 添加这个导入
 import '../controllers/project_controller.dart';
-import '../models/project.dart';
 
 class ProjectView extends StatelessWidget {
   final ProjectController controller;
@@ -12,7 +12,13 @@ class ProjectView extends StatelessWidget {
     return Column(
       children: [
         ElevatedButton(
-          onPressed: () => controller.addProject(),
+          onPressed: () async {
+            final directoryPath = await FilePicker.platform.getDirectoryPath();
+            if (directoryPath != null) {
+              final name = directoryPath.split('/').last;
+              await controller.addProject(name, directoryPath);
+            }
+          },
           child: const Text('添加项目'),
         ),
         Expanded(

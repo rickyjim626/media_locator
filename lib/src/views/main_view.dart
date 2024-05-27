@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import '../controllers/project_controller.dart';
 import '../controllers/disk_controller.dart';
 import 'project_view.dart';
 import 'disk_view.dart';
+import '../services/database_service.dart';
 
 class MainView extends StatelessWidget {
-  const MainView({super.key});
+  final DatabaseService databaseService;
+
+  const MainView({required this.databaseService, super.key}); // 使用 super 参数
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,13 @@ class MainView extends StatelessWidget {
             child: Column(
               children: [
                 ElevatedButton(
-                  onPressed: () => projectController.addProject(),
+                  onPressed: () async {
+                    final directoryPath = await FilePicker.platform.getDirectoryPath();
+                    if (directoryPath != null) {
+                      final name = directoryPath.split('/').last;
+                      await projectController.addProject(name, directoryPath);
+                    }
+                  },
                   child: const Text('添加项目'),
                 ),
                 Expanded(
@@ -58,13 +68,31 @@ class MainView extends StatelessWidget {
                     itemCount: projectController.mediaFiles.length,
                     itemBuilder: (context, index) {
                       final file = projectController.mediaFiles[index];
-                      return ListTile(
-                        title: Text(file.name),
-                        subtitle: Text('${file.size} bytes, ${file.type}, ${file.path}'),
-                        onTap: () => projectController.showInFinder(file.path),
-                        onLongPress: () {
-                          // 实现上下文菜单
+                      return GestureDetector(
+                        onSecondaryTapDown: (details) {
+                          showMenu(
+                            context: context,
+                            position: RelativeRect.fromLTRB(
+                              details.globalPosition.dx,
+                              details.globalPosition.dy,
+                              details.globalPosition.dx,
+                              details.globalPosition.dy,
+                            ),
+                            items: [
+                              PopupMenuItem(
+                                child: const Text('添加例外'),
+                                onTap: () async {
+                                  await projectController.addException(file.path);
+                                },
+                              ),
+                            ],
+                          );
                         },
+                        child: ListTile(
+                          title: Text(file.name),
+                          subtitle: Text('${file.size} bytes, ${file.type}, ${file.path}'),
+                          onTap: () => projectController.showInFinder(file.path),
+                        ),
                       );
                     },
                   ),
