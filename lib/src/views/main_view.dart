@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:logger/logger.dart';
 import '../controllers/project_controller.dart';
 import '../controllers/disk_controller.dart';
 import 'project_view.dart';
@@ -9,8 +10,9 @@ import 'log_view.dart';
 
 class MainView extends StatelessWidget {
   final DatabaseService databaseService;
+  final Logger _logger = Logger();
 
-  const MainView({required this.databaseService, super.key});
+  MainView({required this.databaseService, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +47,13 @@ class MainView extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () async {
+                    _logger.i('添加项目按钮点击');
                     final directoryPath = await FilePicker.platform.getDirectoryPath();
+                    _logger.i('选择的目录路径: $directoryPath');
                     if (directoryPath != null) {
                       final name = directoryPath.split('/').last;
                       await projectController.addProject(name, directoryPath);
+                      projectController.loadProjects();  // 重新加载项目以更新视图
                     }
                   },
                   child: const Text('添加项目'),
