@@ -4,7 +4,7 @@ import '../controllers/project_controller.dart';
 class ProjectView extends StatelessWidget {
   final ProjectController controller;
 
-  const ProjectView({required this.controller, super.key}); // 使用 super 参数
+  const ProjectView({required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {

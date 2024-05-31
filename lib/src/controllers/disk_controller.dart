@@ -12,13 +12,8 @@ class DiskController with ChangeNotifier {
   List<Disk> get disks => _disks;
 
   Future<void> loadDisks() async {
-    try {
-      _disks = await _databaseService.loadDisks();
-      _logger.i('Disks loaded: ${_disks.length}');
-      notifyListeners();
-    } catch (e) {
-      _logger.e('Error loading disks: $e');
-    }
+    _disks = await _databaseService.loadDisks();
+    notifyListeners();
   }
 
   Future<void> updateDiskStatus() async {

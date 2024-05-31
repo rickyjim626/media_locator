@@ -12,12 +12,12 @@ class DiskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: ValueNotifier(controller.disks), // 使用实际的 ValueNotifier
-      builder: (context, List<Disk> disks, child) {
+      valueListenable: ValueNotifier(controller.disks),
+      builder: (context, value, child) {
         return ListView.builder(
-          itemCount: disks.length,
+          itemCount: controller.disks.length,
           itemBuilder: (context, index) {
-            final disk = disks[index];
+            final disk = controller.disks[index];
             _logger.i('Displaying disk: ${disk.name}, online: ${disk.isOnline}');
             return ListTile(
               title: Text(disk.name),
