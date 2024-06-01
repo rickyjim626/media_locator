@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 import '../controllers/disk_controller.dart';
 import 'package:logger/logger.dart';
 
 class DiskView extends StatelessWidget {
-  final DiskController controller;
   final Logger _logger = Logger();
 
-  DiskView({required this.controller, super.key});
+  DiskView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: ValueNotifier(controller.disks),
-      builder: (context, value, child) {
+    return Consumer<DiskController>(
+      builder: (context, controller, child) {
         return ListView.builder(
           itemCount: controller.disks.length,
           itemBuilder: (context, index) {
